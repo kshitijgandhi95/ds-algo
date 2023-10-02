@@ -1,0 +1,25 @@
+class Solution {
+    public boolean isValid(String s) {
+        Stack <Character> notClosed  = new Stack <Character>();
+        for (int i=0; i<s.length(); i++) {
+            if (s.charAt(i) == '(' || s.charAt(i) == '{' || s.charAt(i) == '[') {
+                notClosed.push (s.charAt(i));
+            }
+            else {
+                if (notClosed.empty()) {
+                    return false;
+                }
+                char top = notClosed.peek();
+                if ((top == '[' && s.charAt(i) == ']') || (top == '{' && s.charAt(i) == '}') ||(top == '(' && s.charAt(i) == ')')) {
+                    notClosed.pop();
+                    continue;
+                }
+                return false;
+            }
+        }
+        if (notClosed.empty()) {
+            return true;
+        }
+        return false;
+    }
+}

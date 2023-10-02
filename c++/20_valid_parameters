@@ -1,0 +1,54 @@
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> notClosed;
+        for (int i=0; i<s.length(); i++) {
+            char top;
+            if (!notClosed.empty()) {
+                top = notClosed.top();
+            }
+            else {
+                top = '.';
+            }
+            switch (s[i]) {
+                case '(':
+                    notClosed.push (s[i]);
+                    break;
+                case '{':
+                    notClosed.push (s[i]);
+                    break;
+                case '[':
+                    notClosed.push (s[i]);
+                    break;
+                case ')':
+                    if (top == '(') {
+                        notClosed.pop();
+                    }
+                    else {
+                        return false;
+                    }
+                    break;
+                case '}':
+                    if (top == '{') {
+                        notClosed.pop();
+                    }
+                    else {
+                        return false;
+                    }
+                    break;
+                case ']':
+                    if (top == '[') {
+                        notClosed.pop();
+                    }
+                    else {
+                        return false;
+                    }
+                    break;
+            }
+        }
+        if (notClosed.empty()) {
+            return true;
+        }
+        return false;
+    }
+};
