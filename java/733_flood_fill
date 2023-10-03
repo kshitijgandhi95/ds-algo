@@ -1,0 +1,33 @@
+class Solution {
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+        Queue <Pair<Integer, Integer>> adj = new LinkedList<Pair<Integer, Integer>> ();
+        int c = image[sr][sc];
+        if (c == color) {
+            return image;
+        }
+        adj.add (new Pair<>(sr, sc));
+        image[sr][sc] = color;
+
+        while (!adj.isEmpty()) {
+            Pair<Integer, Integer> p = adj.peek();
+            adj.remove();
+            if (p.getKey() - 1 >= 0 && image[p.getKey() - 1][p.getValue()] == c) {
+                image[p.getKey() - 1][p.getValue()] = color;
+                adj.add (new Pair<> (p.getKey() - 1, p.getValue()));
+            }
+            if (p.getKey() + 1 < image.length && image[p.getKey() + 1][p.getValue()] == c) {
+                image[p.getKey() + 1][p.getValue()] = color;
+                adj.add (new Pair<> (p.getKey() + 1, p.getValue()));
+            }
+            if (p.getValue() - 1 >= 0 && image[p.getKey()][p.getValue() - 1] == c) {
+                image[p.getKey()][p.getValue() - 1] = color;
+                adj.add (new Pair<> (p.getKey(), p.getValue() - 1));
+            }
+            if (p.getValue() + 1 < image[0].length && image[p.getKey()][p.getValue() + 1] == c) {
+                image[p.getKey()][p.getValue() + 1] = color;
+                adj.add (new Pair<> (p.getKey(), p.getValue() + 1));
+            }
+        }
+        return image;
+    }
+}
