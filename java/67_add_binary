@@ -1,0 +1,24 @@
+//better to use StringBuilder
+class Solution {
+    public String addBinary(String a, String b) {
+        int maxLength = Math.max (a.length(), b.length());
+        int aLength = a.length();
+        int bLength = b.length();
+        int carr = 0;
+        String retString = "";
+
+        for (int i=0; i<maxLength; i++) {
+            int aInt = i < aLength ? Character.getNumericValue(a.charAt(aLength - 1 - i)) : 0;
+            int bInt = i < bLength ? Character.getNumericValue(b.charAt(bLength - 1 - i)) : 0;
+            
+            int sum = aInt + bInt + carr;
+            int val = sum%2;
+            carr = sum/2;
+            retString = val + retString;
+        }
+        if (carr > 0) {
+            retString = carr + retString;
+        }
+        return retString;
+    }
+}
