@@ -1,0 +1,47 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int diameterOfBinaryTree(TreeNode root) {
+        int max = 0;
+        int curr = 0;
+        if (root == null) {
+            return 0;
+        }
+        Pair<Integer, Integer> p = getDiameter(root, curr, max); 
+        return p.getValue();
+    }
+
+    public Pair<Integer, Integer> getDiameter (TreeNode root, int curr, int max) {
+        Pair<Integer, Integer> left = new Pair<Integer, Integer>(curr, max);
+        Pair<Integer, Integer> right = new Pair<Integer, Integer>(curr, max);
+        int include = 0;
+        if (root.left == null && root.right == null) {
+            return new Pair (curr+1, max);
+        }
+        if (root.left != null) {
+            include++;
+            left = getDiameter (root.left, curr, max);
+        }
+        if (root.right != null) {
+            include++;
+            right = getDiameter (root.right, curr, max);
+        }
+        int including = include == 2 ? 1 : 0;
+        max = Math.max (max, Math.max(left.getValue(), Math.max(right.getValue(), left.getKey() + right.getKey() )));
+        curr = Math.max (left.getKey(), right.getKey()) + 1;
+        return new Pair(curr, max);
+    }
+}
