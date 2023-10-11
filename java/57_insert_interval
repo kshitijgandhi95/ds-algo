@@ -1,0 +1,79 @@
+//Using binary search
+//incomplete solution
+//finds only index where interval fits
+
+class Solution {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+       int start = 0;
+       int end = intervals.length-1;
+       
+       int index = getIndexByBinarySearch (intervals, newInterval, start, end);
+       
+       int[][] retIntervals = new int[intervals.length][2];
+       
+       for (int i=0; i<index; i++) {
+           retIntervals[i][0] = intervals[i][0];
+           retIntervals[i][1] = intervals[i][1];
+       }
+       
+       retIntervals[index][0] = newInterval[0];
+       retIntervals[index][1] = newInterval[1];
+
+        for (int i=index+1; i<retIntervals.length; i++) {
+            retIntervals[i][0] = intervals[i][0];
+            retIntervals[i][1] = intervals[i][1];
+        }
+        return retIntervals;
+    }
+
+    public int getIndexByBinarySearch (int[][] intervals, int[] newInterval, int start, int end) {
+        int mid = start - (start - end)/2;
+        if (intervals[mid][0] >= newInterval[0]) {
+            if (mid -1 >= 0 && intervals[mid-1][0] <= newInterval[0]) {
+                return mid;
+            }
+            if (mid -1 < 0) {
+                return 0;
+            }
+            return getIndexByBinarySearch (intervals, newInterval, start, mid-1);
+        }
+        else {
+             if (mid+1 >= intervals.length) {
+                 return intervals.length;
+             }
+             return getIndexByBinarySearch (intervals, newInterval, mid+1, end);
+            }
+        
+    }
+}
+
+//accepted solution O(n)
+class Solution {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        
+        int n = intervals.length;
+        List<int[]> res = new ArrayList();
+        boolean intervalInserted = false;
+
+        for(int i=0;i<n;i++) {
+            if(intervals[i][1] < newInterval[0]) {
+                res.add(intervals[i]);
+            } else if(intervals[i][0] > newInterval[1]) {
+                if(!intervalInserted) {
+                    res.add(newInterval);
+                    intervalInserted = true;
+                }
+                res.add(intervals[i]);
+            } else {
+                newInterval[0] = Math.min(newInterval[0], intervals[i][0]);
+                newInterval[1] = Math.max(newInterval[1], intervals[i][1]);
+            }
+        }
+
+        if(!intervalInserted) {
+            res.add(newInterval);
+        }
+
+        return res.toArray(new int[0][]); // convert to 2D array
+    }
+}
