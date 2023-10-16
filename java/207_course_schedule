@@ -1,0 +1,49 @@
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        Map<Integer, ArrayList<Integer>> traversal = new HashMap<>();
+
+        for (int i=0; i<prerequisites.length; i++) {
+            int first = prerequisites[i][0];
+            int second = prerequisites[i][1];
+
+            if (!traversal.containsKey(first)) {
+                traversal.put (first, new ArrayList<Integer>());
+            }
+            traversal.get(first).add (second);
+        }
+
+        Map<Integer, Integer> stage = new HashMap<>();
+
+        for (int i=0; i<numCourses; i++) {
+            if (!stage.containsKey(i)) {
+                // stage.put (i, 1);
+                if (hasLoop(traversal, stage, i)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    boolean hasLoop (Map<Integer, ArrayList<Integer>> traversal, Map<Integer, Integer> stage, int i) {
+        if (stage.containsKey(i)) {
+            if (stage.get(i) == 1) {
+                return true;
+            }
+            return false;
+        }
+        stage.put (i, 1);
+        if (!traversal.containsKey(i)) {
+            stage.put (i, 2);
+            return false;
+        }
+        ArrayList<Integer> arr = traversal.get(i);
+        for (int j=0; j<arr.size(); j++) {
+            if (hasLoop(traversal, stage, arr.get(j))) {
+                return true;
+            }
+        }
+        stage.put (i, 2);
+        return false;
+    }
+}

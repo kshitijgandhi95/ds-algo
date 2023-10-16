@@ -1,0 +1,57 @@
+//not done on own as simple but long solution
+
+class Solution {
+    public int orangesRotting(int[][] g) {
+        int n=g.length;
+        int m=g[0].length;
+        int t=0;
+      Queue<int[]> q=new LinkedList<>();
+      int f=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(g[i][j]==2){
+                    q.add(new int[]{i,j});
+                }
+                else if(g[i][j]==1) f++;
+            }
+        }
+        if(f==0) return 0;
+     while(!q.isEmpty()){
+         int e=0;
+         int s=q.size();
+         for(int h=0;h<s;h++){
+             int[] z=q.remove();
+             if(z[0]-1>=0&&g[z[0]-1][z[1]]==1){
+                 e++;
+                g[z[0]-1][z[1]]=2;
+                q.add(new int[]{z[0]-1,z[1]}); 
+             }
+              if(z[0]+1<n&&g[z[0]+1][z[1]]==1){
+                  e++;
+                g[z[0]+1][z[1]]=2;
+                q.add(new int[]{z[0]+1,z[1]}); 
+             }
+              if(z[1]-1>=0&&g[z[0]][z[1]-1]==1){
+                  e++;
+                g[z[0]][z[1]-1]=2;
+                q.add(new int[]{z[0],z[1]-1}); 
+             }
+              if(z[1]+1<m&&g[z[0]][z[1]+1]==1){
+                  e++;
+                g[z[0]][z[1]+1]=2;
+                q.add(new int[]{z[0],z[1]+1}); 
+             }
+         }
+         if(e!=0) t++;
+     }
+      for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(g[i][j]==1){
+                  return -1;
+                }
+               
+            }
+        }
+        return t;
+    }
+}
