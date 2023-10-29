@@ -1,0 +1,55 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        LinkedList<TreeNode> pList = new LinkedList<>();
+        LinkedList<TreeNode> qList = new LinkedList<>();
+        ancestorList(root, p, pList);
+        ancestorList(root, q, qList);
+        return iterateAncestors (pList, qList);
+    }
+
+    private boolean ancestorList (TreeNode root, TreeNode p, List<TreeNode> l) {
+        if (root == null) {
+            return false;
+        }
+        if (root == p) {
+            l.add (root);
+            return true;
+        }
+        if (root.left != null && ancestorList(root.left, p, l)) {
+            l.add (root);
+            return true;
+        }
+        if (root.right != null && ancestorList(root.right, p, l)) {
+            l.add (root);
+            return true;
+        }
+        return false;
+    }
+
+    private TreeNode iterateAncestors (LinkedList<TreeNode> pList, LinkedList<TreeNode> qList) {
+        Iterator<TreeNode> pListIterator = pList.descendingIterator();
+        Iterator<TreeNode> qListIterator = qList.descendingIterator();
+        TreeNode ret = null;
+        while (pListIterator.hasNext() && qListIterator.hasNext())  
+        { 
+            TreeNode p = pListIterator.next();
+            TreeNode q = qListIterator.next();
+            // System.out.println (p.val + " " + q.val);
+            if (p == q) {
+                ret = p;
+                continue;
+            }
+            break;
+        }
+        return ret;
+    }
+}
