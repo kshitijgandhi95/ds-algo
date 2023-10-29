@@ -1,0 +1,42 @@
+class Solution {
+    public void sortColors(int[] nums) {
+        int startIndex = 0;
+        while (startIndex < nums.length && nums[startIndex] == 0) {
+            startIndex++;
+        }
+        if (startIndex == nums.length) {
+            return;
+        }
+
+        int endIndex = nums.length - 1;
+        while (endIndex >= 0 && nums[endIndex] == 2) {
+            endIndex--;
+        }
+        
+        for (int i=startIndex; i<=endIndex && startIndex <= endIndex;) {
+            if (nums[i] == 0) {
+                nums[i] = nums[startIndex];
+                nums[startIndex] = 0;
+            }
+            else if (nums[i] == 2) {
+                nums[i] = nums[endIndex];
+                nums[endIndex] = 2;
+                if (nums[i] == 0) {
+                   nums[i] = nums[startIndex];
+                   nums[startIndex] = 0; 
+                }
+            }
+
+            while (startIndex < nums.length && nums[startIndex] == 0) {
+                i = startIndex;
+                startIndex++;
+                
+            }
+
+            while (endIndex >= 0 && nums[endIndex] == 2) {
+                endIndex--;
+            }
+            i = i+1;
+        }
+    }
+}
