@@ -1,0 +1,24 @@
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> retList = new ArrayList<>();
+        List<Integer> curr = new ArrayList<>();
+        Arrays.sort(candidates);
+        return findSum (candidates, target, 0, retList, curr);
+    }
+
+    private List<List<Integer>> findSum (int[] candidates, int target, int index, List<List<Integer>> retList, List<Integer> curr) {
+        if (target == 0) {
+            retList.add (curr);
+            return retList;
+        }
+        if (target < 0) {
+            return retList;
+        }
+        for (int i=index; i<candidates.length; i++) {
+            List<Integer> newList = new ArrayList<>(curr);
+            newList.add (candidates[i]);
+            findSum (candidates, target - candidates[i], i, retList, newList);
+        }
+        return retList;
+    }
+}
