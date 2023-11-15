@@ -1,0 +1,29 @@
+class Solution {
+    public int trap(int[] height) {
+        if (height.length == 0) {
+            return 0;
+        }
+        int[] maxHeightToLeft = new int[height.length];
+        Arrays.fill (maxHeightToLeft, 0);
+        int[] maxHeightToRight = new int[height.length];
+        Arrays.fill (maxHeightToRight, 0);
+        
+        int currMax = height[0]; 
+        for (int i=1; i<height.length; i++) {
+            maxHeightToLeft[i] = Math.max (currMax, height[i-1]);
+            currMax = Math.max (currMax, maxHeightToLeft[i]);
+        }
+
+        currMax = height[height.length-1];
+        for (int i=height.length-2; i>=0; i--) {
+            maxHeightToRight[i] = Math.max(currMax, height[i+1]);
+            currMax = Math.max (currMax, maxHeightToRight[i]);
+        }
+
+        int retVal = 0;
+        for (int i=0; i<height.length; i++) {
+            retVal += Math.max (Math.min (maxHeightToLeft[i], maxHeightToRight[i]) - height[i], 0);
+        }
+        return retVal;
+    }
+}

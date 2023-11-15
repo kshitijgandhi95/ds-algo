@@ -1,0 +1,28 @@
+class Solution {
+    public String convert(String s, int numRows) {
+        StringBuilder str = new StringBuilder();
+        
+        ArrayList<StringBuilder> arrList = new ArrayList<>();
+        for (int i=0; i<numRows; i++) {
+            arrList.add (new StringBuilder(""));
+        }
+
+        int currIndex = 0;
+        int len = s.length();
+        
+        while (currIndex < len) {
+            for (int i=0; i<numRows && currIndex<len; i++ ) {
+                arrList.set(i, arrList.get(i).append(s.charAt(currIndex)));
+                currIndex++;
+            }
+            for (int i=numRows-2; i>0 && currIndex<len; i--) {
+                arrList.set(i, arrList.get(i).append(s.charAt(currIndex)));
+                currIndex++;
+            }
+        }
+        for (int i=0; i<numRows; i++) {
+            str.append(arrList.get(i));
+        }
+        return str.toString();
+    }
+}

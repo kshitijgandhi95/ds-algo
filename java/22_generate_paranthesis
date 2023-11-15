@@ -1,0 +1,26 @@
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        if (n == 0) {
+            return new ArrayList<String>();
+        }
+        List<String> retList = new ArrayList<>();
+        recursion (0, 0, "", n, retList);
+        return retList;
+    }
+
+    void recursion (int open, int closed, String curr, int n, List<String> retList) {
+        if (closed == n) {
+            retList.add(curr);
+            return;
+        }
+        if (open < n) {
+            String local = curr + '(';
+            recursion (open+1, closed, local, n, retList);
+        }
+        if (closed < open) {
+            String local = curr + ')';
+            recursion (open, closed + 1, local, n, retList);
+        }
+        return;
+    }
+}
