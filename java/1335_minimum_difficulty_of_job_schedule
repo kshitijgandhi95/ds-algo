@@ -1,0 +1,95 @@
+//copied
+class Solution {
+    public int minDifficulty(int[] jobDifficulty, int days) {
+        
+        if(days > jobDifficulty.length){
+            return -1;
+        }
+        
+        int dp[][] = new int[jobDifficulty.length + 1][days + 1];
+        for(int row[] : dp){
+            Arrays.fill(row, -1);
+        }
+        
+        
+        return solve(0, jobDifficulty, days, dp);
+    }
+    
+    public int solve(int idx, int[] jd, int days, int dp[][]){
+        
+        if(idx >= jd.length){
+            if(days == 0){
+                return 0;
+            } else {
+                return (int)1e8;
+            }
+        } else if(days == 0){
+            return (int)1e8;
+        }
+        
+        if(dp[idx][days] != -1){
+            return dp[idx][days];
+        }
+        
+        int ans = (int)1e8;
+        int max = -1;
+        
+        for(int i = idx; i <= jd.length - days; i++){
+            max = Math.max(max, jd[i]);
+                        
+            int temp = max + solve(i + 1, jd, days - 1, dp);
+            
+            ans = Math.min(temp, ans);
+        }
+        
+        return dp[idx][days] = ans;
+    }
+    
+    // int[][] cache;
+    // int numJobs;
+    // int[] jobs;
+    // int days;
+    // int[] maxValue;
+
+    // public int minDifficulty(int[] jobDifficulty, int d) {
+    //     numJobs = jobDifficulty.length;
+    //     cache = new int[numJobs][d+1];
+    //     this.jobs = jobDifficulty;
+    //     this.days = d;
+    //     maxValue = new int[d+1];
+        
+    //     if (numJobs < days) {
+    //         return -1;
+    //     }
+
+    //     Arrays.fill (maxValue, Integer.MIN_VALUE);
+
+    //     maxValue[1] = jobs[0];
+    //     int retVal =  dp(0, 1, 0);
+    //     return retVal;
+    // }
+
+    // int dp(int jobIndex, int currDay, int maxValDay) {
+    //     if (jobIndex == numJobs-1) {
+    //         return Math.max(jobs[jobIndex], maxValDay);
+    //     }
+        
+    //     int includedSameDay = Integer.MAX_VALUE;
+    //     int newDay = Integer.MAX_VALUE;
+    //     if (numJobs - jobIndex - 1 > days - currDay) {
+    //         includedSameDay = dp (jobIndex+1, currDay, Math.max(maxValDay, jobs[jobIndex])); 
+    //     }
+    //     else if (currDay < days /*&& jobIndex != 0*/) {
+    //         maxValDay = Math.max (maxValDay, jobs[jobIndex]);
+    //         newDay = dp (jobIndex+1, currDay+1, 0);
+    //     }
+    //     if (newDay != Integer.MAX_VALUE && newDay + maxValDay < includedSameDay) {
+    //         return (newDay + maxValDay);
+    //     }
+    //     return includedSameDay;
+
+        
+        
+    // }
+}
+

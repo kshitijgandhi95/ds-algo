@@ -1,0 +1,34 @@
+class Solution {
+    public String mostCommonWord(String paragraph, String[] banned) {
+        Set<String> bannedSet = new HashSet<>();
+        
+        for (int i=0; i<banned.length; i++) {
+            bannedSet.add (banned[i]);
+        }
+
+        String[] pSplit = paragraph.toLowerCase().replaceAll("\\W+" , " ").split("\\s+");
+        if (pSplit.length == 0) {
+            return null;
+        }
+
+        HashMap<String, Integer> mp = new HashMap<>();
+        int count = 0;
+        String retString = null;
+
+        for (int i=0; i<pSplit.length; i++) {
+            String s = pSplit[i];
+            if (bannedSet.contains(s)) {
+                continue;
+            }
+            int newCount = mp.getOrDefault(s, 0)+1;  
+            mp.put(s, newCount);
+            
+            if (newCount > count) {
+                count = newCount;
+                retString = s;
+            }
+        }
+
+        return retString;
+    }
+}
