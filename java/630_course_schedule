@@ -1,0 +1,23 @@
+//copied
+//greedy
+class Solution {
+    public int scheduleCourse(int[][] courses) {
+        
+        // step 1 : sort array in ascending order of lastDay
+        Arrays.sort(courses, Comparator.comparingInt(o -> o[1]));
+        
+        // step 2 : take a max priority queue
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.reverseOrder());
+        
+        // step 3 : traverse in sorted array
+        int totalTime = 0; // duration
+        for(int[] course : courses){
+            pq.add(course[0]); // put duration of ith course into priority queue
+            totalTime += course[0];
+            // if ith course exceeding the lastDay
+            if(totalTime>course[1])
+                totalTime-=pq.poll(); // remove course with high duration
+        }
+        return pq.size();
+    }
+}
