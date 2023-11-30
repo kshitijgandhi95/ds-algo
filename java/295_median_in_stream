@@ -1,0 +1,74 @@
+class MedianFinder {
+    PriorityQueue<Integer> minHeap;
+    PriorityQueue<Integer> maxHeap;
+    int minHeapCount;
+    int maxHeapCount;
+
+    public MedianFinder() {
+        minHeap = new PriorityQueue<>();
+        maxHeap = new PriorityQueue<>(new Comparator<Integer>(){
+            public int compare (Integer a, Integer b) {
+                return b.compareTo(a);
+            }
+        });
+        minHeapCount = 0;
+        maxHeapCount = 0;
+    }
+    
+    public void addNum(int num) {
+        boolean minHeapInsert = addInMinHeap(num);
+        if (minHeapInsert) {
+            if (minHeapCount > maxHeapCount) {
+                maxHeap.add (minHeap.poll());
+            }
+            minHeap.add (num);
+        }
+        else {
+            if (maxHeapCount > minHeapCount) {
+                minHeap.add(maxHeap.poll());
+            }
+            maxHeap.add(num);
+        }
+        minHeapCount = minHeap.size();
+        maxHeapCount = maxHeap.size();
+        return;
+
+    }
+
+    private boolean addInMinHeap(int num) {
+        int minHeapPeek = minHeapCount != 0 ? (minHeap.peek()) : 0;
+        int maxHeapPeek = maxHeapCount != 0 ? (maxHeap.peek()) : 0;
+
+        if (minHeapPeek <= num) {
+            return true;
+        }
+        if (num >= maxHeapPeek && num <= minHeapPeek) {
+            if (minHeapCount <= maxHeapCount) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public double findMedian() {
+        if (minHeapCount == 0 && maxHeapCount == 0) {
+            return 0.0;
+        }
+
+        int totalCount = minHeapCount+maxHeapCount;
+        if (totalCount%2 == 0) {
+            return ((double)minHeap.peek() + (double)maxHeap.peek())/2;
+        }
+        if (maxHeapCount > minHeapCount) {
+            return (double) maxHeap.peek();
+        }
+        return (double) minHeap.peek();
+    }
+}
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */
