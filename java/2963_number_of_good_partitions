@@ -1,0 +1,26 @@
+//copied
+class Solution {
+    public int numberOfGoodPartitions(int[] nums) {
+        long mod = 1_000_000_007;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int j = 0; j < nums.length; j++) {
+            map.put(nums[j], j);
+        }
+        int num = 1;
+        int max = 0;
+        for (int j = 0; j < nums.length; j++) {
+            max = Math.max(max, map.get(nums[j]));
+            if (max == j && j < nums.length-1) {
+                num++;
+                max = j+1;
+            }
+        }
+        long ret = 1;
+        while (num > 1) {
+            ret *= 2;
+            ret %= mod;
+            num--;
+        }
+        return (int)ret;
+    }
+}

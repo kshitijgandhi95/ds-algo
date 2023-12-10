@@ -1,0 +1,22 @@
+
+	class Solution {
+		public int minimumAddedCoins(int[] a, int target) {
+			Arrays.sort(a);
+			int n = a.length;
+			long reach = 0;
+			int ans = 0;
+			for(int v : a){
+				while(reach + 1 < v){
+					reach += reach + 1;
+					ans++;
+				}
+				reach += v;
+			}
+			while(reach + 1 <= target){
+				reach += reach + 1;
+				ans++;
+			}
+			
+			return ans;
+		}
+	}

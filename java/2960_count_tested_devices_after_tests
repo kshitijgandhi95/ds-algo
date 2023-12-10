@@ -1,0 +1,15 @@
+class Solution {
+    public int countTestedDevices(int[] n) {
+        int counter = 0;
+        int answer = 0;
+        
+        for (int i=0; i<n.length; i++) {
+            n[i] = Math.max (0, n[i] - counter);
+            if (n[i] > 0) {
+                counter++;
+                answer++;
+            }
+        }
+        return answer;
+    }
+}

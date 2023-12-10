@@ -1,0 +1,77 @@
+class Solution {
+    Set<Pair<Integer, Integer>> included;
+    Set<Pair<Integer, Integer>> notIncluded;
+    Queue<Pair<Integer, Integer>[]> pQue;
+    Map<Pair<Integer, Integer>, Pair<Integer, Integer>> parent;
+    public int minCostConnectPoints(int[][] points) {
+        included = new HashSet<>();
+        notIncluded = new HashSet<>();
+        
+        pQue = new PriorityQueue<>(new Comparator<Pair<Integer, Integer>[]>(){
+            public int compare(Pair<Integer, Integer>[] p1, Pair<Integer, Integer>[] p2) {
+                int dist1 = Math.abs(p1[0].getKey() - p1[1].getKey()) + Math.abs(p1[0].getValue() - p1[1].getValue());
+                int dist2 = Math.abs(p2[0].getKey() - p2[1].getKey()) + Math.abs(p2[0].getValue() - p2[1].getValue());
+
+                return dist1 - dist2;
+            }
+        });
+
+        Pair<Integer, Integer>[] pointsPairArr = new Pair[points.length];
+
+        for (int i=0; i<points.length; i++) {
+            pointsPairArr[i] = new Pair<Integer, Integer>(points[i][0], points[i][1]);
+        }
+
+        for (int i=0; i<pointsPairArr.length-1; i++) {
+            for (int j=i+1; j<pointsPairArr.length; j++) {
+                Pair<Integer, Integer>[] p = new Pair[2];
+                p[0] = pointsPairArr[i];
+                p[1] = pointsPairArr[j];
+                pQue.add (p); 
+            }
+        }
+
+        parent = new HashMap<>();
+        for (int i=0; i<pointsPairArr.length; i++) {
+            parent.put (pointsPairArr[i], pointsPairArr[i]);
+        }
+
+        int dist = 0;
+        int count = 0;
+        while (count != points.length && pQue.size() != 0) {
+            Pair<Integer, Integer>[] arr = pQue.peek();
+            pQue.remove();
+            Pair<Integer, Integer> p1 = arr[0];
+            Pair<Integer, Integer> p2 = arr[1];
+            
+            Pair<Integer, Integer> parent1 = find (p1);
+            Pair<Integer, Integer> parent2 = find (p2);
+
+            if (parent1 != parent2) {
+                union (parent1, parent2);
+                dist += Math.abs(p1.getKey() - p2.getKey()) + Math.abs(p1.getValue() - p2.getValue());
+                included.add (p2);
+                count++;
+            }
+        }
+        return dist;
+    }
+
+    private Pair<Integer, Integer> find (Pair<Integer, Integer> i) {
+        if (parent.get(i) == i) {
+             return i;
+        }
+        return find(parent.get(i));
+    }
+
+    private void union (Pair<Integer, Integer> i, Pair<Integer, Integer> j) {
+        Pair<Integer, Integer> x = parent.get(i);
+        Pair<Integer, Integer> y = parent.get(j);
+
+        if (x == y) {
+            return;
+        }
+        parent.put (j, i);
+        return;
+    }
+}

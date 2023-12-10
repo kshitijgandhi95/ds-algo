@@ -1,0 +1,74 @@
+//copied
+
+class Solution {
+    private boolean findItineraryHelp(String from, HashMap<String, List<String>> mpp, List<String> ans, int n) {
+        if( ans.size() == n+1 ) return true;
+        if( !mpp.containsKey(from) ) return false;
+
+        for(int i=0; i<mpp.get(from).size(); i++){
+            String to = mpp.get(from).get(i);
+            if( to == "$$$" ) continue;
+
+            // mark it as visited
+            mpp.get(from).set(i, "$$$");
+            ans.add(to); 
+
+            // check if using [from, nxt] ticket we can traverse all the city
+            if( findItineraryHelp(to, mpp, ans, n) ) return true;
+            else{
+                mpp.get(from).set(i, to); // backtrack
+                ans.remove(ans.size()-1);
+            }
+        }
+        return false;
+    }
+
+
+
+    public List<String> findItinerary(List<List<String>> ts) {
+        HashMap<String, List<String>> mpp = new HashMap<>();
+        int n = ts.size();
+        List<String> ans = new ArrayList<>();
+        String start = "JFK";
+
+        for(List<String> t : ts ){
+            String from = t.get(0), to = t.get(1);
+            mpp.putIfAbsent(from, new ArrayList<>());
+            mpp.get(from).add(to);
+        } 
+        
+        // sort TOs a/c to lexicographically order
+        for(String from : mpp.keySet()){
+            Collections.sort( mpp.get(from));
+        }
+
+        ans.add(start);
+        findItineraryHelp(start, mpp, ans, n);
+        return ans;
+    }
+}
+
+// class Solution {
+//     public List<String> findItinerary(List<List<String>> tickets) {
+//         Map<String, PriorityQueue<String>> graph = new HashMap<>();
+        
+//         for (List<String> ticket : tickets) {
+//             graph.putIfAbsent(ticket.get(0), new PriorityQueue<>());
+//             graph.get(ticket.get(0)).add(ticket.get(1));
+//         }
+        
+//         LinkedList<String> itinerary = new LinkedList<>();
+        
+//         dfs("JFK", graph, itinerary);
+        
+//         return itinerary;
+//     }
+    
+//     private void dfs(String airport, Map<String, PriorityQueue<String>> graph, LinkedList<String> itinerary) {
+//         PriorityQueue<String> nextAirports = graph.get(airport);
+//         while (nextAirports != null && !nextAirports.isEmpty()) {
+//             dfs(nextAirports.poll(), graph, itinerary);
+//         }
+//         itinerary.addFirst(airport);
+//     }
+// }
