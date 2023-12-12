@@ -1,0 +1,57 @@
+class Solution {
+    public String minWindow(String s, String t) {
+      int sLen = s.length();
+      int tLen = t.length();
+    
+      if (sLen < tLen) {
+          return "";
+      }
+      
+      Map<Character, Integer> mp = new HashMap<>();
+
+      for (int i=0; i<tLen; i++) {
+          mp.put (t.charAt(i), mp.getOrDefault(t.charAt(i), 0) + 1);
+      }
+
+      int begin = 0;
+      int end = 0;
+      int counter = mp.size();
+
+      String retString = "";
+
+      while (end < sLen) {
+          if (mp.containsKey(s.charAt(end))) {
+              mp.put (s.charAt(end), mp.get(s.charAt(end))-1);
+              if (mp.get(s.charAt(end)) == 0) {
+                  counter--;
+              }
+
+          }
+          end++;
+
+          while (counter == 0) {
+            //   System.out.println ("here");
+              while (!mp.containsKey(s.charAt(begin))) {
+                  begin++;
+              }
+            //   System.out.println ("begin " + begin);
+              retString = retString != "" ? (retString.length() > end-begin ? s.substring(begin, end) : retString ) : s.substring(begin, end);
+
+            //   System.out.println ("Ret string " + retString);
+              int temp = begin;
+
+              if (mp.containsKey(s.charAt(temp))) {
+                  mp.put (s.charAt(temp), mp.get(s.charAt(temp))+1);
+                  if (mp.get(s.charAt(temp)) > 0) {
+                      counter++;
+                  }
+              }
+              begin++;
+          
+          }
+        }
+        return retString;
+      }
+
+
+    }
