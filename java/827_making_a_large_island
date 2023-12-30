@@ -1,0 +1,81 @@
+class Solution {
+    int[][] visited;
+    Map<Integer, Integer> mp;
+
+    public int largestIsland(int[][] grid) {
+        visited = new int[grid.length][grid[0].length];
+        mp = new HashMap<>();
+        
+        for (int[] arr: visited) {
+            Arrays.fill (arr, 0);
+        }
+
+        int counter = 2;
+        int maxSize = 0;
+        for (int i=0; i<grid.length; i++) {
+            for (int j=0; j<grid[0].length; j++) {
+                int currSize = 0;
+                if (visited[i][j] == 0 && grid[i][j] == 1)
+                    currSize = floodFill (grid, counter, i, j);
+                    mp.put (counter, currSize);
+                    if (currSize > maxSize) {
+                        maxSize = currSize;
+                    }
+                    counter++;
+            }
+        }
+        
+        int answer = maxSize;
+        
+        for (int i=0; i<grid.length; i++) {
+            for (int j=0; j<grid[0].length; j++) {
+                if (grid[i][j] == 0) {
+                    int curr = 1;
+                    Set<Integer> currSet = new HashSet<>();
+                    if (i-1 >= 0 && grid[i-1][j] != 0 && !currSet.contains(grid[i-1][j])) {
+                        curr+= mp.get(grid[i-1][j]);
+                        currSet.add (grid[i-1][j]);
+                    }
+                    if (j-1 >= 0 && grid[i][j-1] != 0 && !currSet.contains(grid[i][j-1])) {
+                        curr+= mp.get(grid[i][j-1]);
+                        currSet.add (grid[i][j-1]);
+                    }
+                    if (i+1 < grid.length && grid[i+1][j] != 0 && !currSet.contains(grid[i+1][j])) {
+                        curr+= mp.get(grid[i+1][j]);
+                        currSet.add (grid[i+1][j]);
+                    }
+                    if (j+1 < grid[0].length && grid[i][j+1] != 0 && !currSet.contains(grid[i][j+1])) {
+                        curr+= mp.get(grid[i][j+1]);
+                        currSet.add (grid[i][j+1]);
+                    }
+                    if (curr > answer) {
+                        answer = curr;
+                    }
+                }
+            }
+        }
+
+        return answer;
+    }
+
+    private int floodFill (int[][] grid, int counter, int i, int j){
+        int ans = 0;
+        grid[i][j] = counter;
+        visited[i][j] = 1;
+        ans++;
+
+        if (i-1 >= 0 && visited[i-1][j] == 0 && grid[i-1][j] != 0) {
+            ans+= floodFill (grid, counter, i-1, j);
+        }
+        if (j-1 >= 0 && visited[i][j-1] == 0 && grid[i][j-1] != 0) {
+            ans+= floodFill (grid, counter, i, j-1);
+        }
+        if (i+1 < grid.length && visited[i+1][j] == 0 && grid[i+1][j] != 0) {
+            ans+= floodFill (grid, counter, i+1, j);
+        }
+        if (j+1 < grid[0].length && visited[i][j+1] == 0 && grid[i][j+1] != 0) {
+            ans+= floodFill (grid, counter, i, j+1);
+        }
+        return ans;
+    }
+}

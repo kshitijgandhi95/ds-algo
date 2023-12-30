@@ -1,0 +1,27 @@
+class Solution {
+    List<List<Integer>> retList;
+    public List<List<Integer>> subsets(int[] nums) {
+        retList = new ArrayList<>();
+
+        dfs (nums, 0,  new ArrayList<Integer>());
+
+        return retList;
+    }
+
+    private void dfs (int[] nums, int index, List<Integer> currList) {
+        if (index == nums.length) {
+            retList.add (currList);
+            return;
+        }
+
+        List<Integer> inclusiveList = new ArrayList<>(currList);
+        List<Integer> exclusiveList = new ArrayList<>(currList);
+        
+        dfs (nums, index+1, exclusiveList);
+        inclusiveList.add (nums[index]);
+        dfs (nums, index+1, inclusiveList);
+        
+        
+        return;
+    }
+}
