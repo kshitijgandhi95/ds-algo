@@ -1,0 +1,46 @@
+class Solution {
+    List<List<Integer>> retList;
+    
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        retList = new ArrayList<>();
+        Arrays.sort (candidates);
+
+        makeCombinations (candidates, target, 0, new ArrayList<Integer>());
+
+        return retList;
+        
+    }
+
+    private void makeCombinations (int[] candidates, int target, int index, List<Integer> currList) {
+        // System.out.println (target + " " + index + " " + currList.size());
+        
+
+        if (target == 0) {
+            retList.add (new ArrayList<Integer>(currList));
+            return;
+        }
+
+        if (target < 0) {
+            return;
+        }
+
+        if (index >= candidates.length) {
+            return;
+        }
+
+        currList.add (candidates[index]);
+        makeCombinations (candidates, target - candidates[index], index+1, currList);
+
+        while (index+1 < candidates.length) {
+            if (candidates[index+1] == candidates[index]) {
+                index++;
+                continue;
+            }
+            break;
+        }
+        currList.remove (currList.size()-1);
+        makeCombinations (candidates, target, index+1, currList);
+
+        return;
+    }
+}

@@ -1,0 +1,28 @@
+class Solution {
+    List<List<Integer>> retList;
+    public List<List<Integer>> combine(int n, int k) {
+        retList = new ArrayList<>();
+
+        dfs (n, k, 1, new ArrayList<Integer>());
+        return retList;
+    }
+
+    private void dfs (int n, int k, int index, List<Integer> currList) {
+        if (currList.size() == k) {
+            retList.add (new ArrayList<Integer>(currList));
+            return;
+        }
+        
+        if (index > n) {
+            return;
+        }
+
+        currList.add (index);
+        
+        dfs (n, k, index+1, currList);
+        currList.remove (currList.size()-1);
+        dfs (n, k, index+1, currList);
+        
+        return;
+    }
+}
