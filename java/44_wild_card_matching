@@ -1,0 +1,51 @@
+class Solution {
+    int[][] isVisited;   
+    public boolean isMatch(String s, String p) {
+        isVisited = new int[s.length()+1][p.length()+1];
+        return isMatch (s, p, 0, 0);
+    }
+
+    private boolean isMatch (String s, String p, int i, int j) {
+        if (isVisited[i][j] != 0) {
+            return (isVisited[i][j] == 1 ? true : false);
+        }
+        if (j == p.length() && i == s.length()) {
+            isVisited[i][j] = 1;
+            return true;
+        }
+        if (j == p.length() && i < s.length()) {
+            isVisited[i][j] = -1;
+            return false;
+        }
+        if (i == s.length()) {
+            for (int k=j; k<p.length(); k++) {
+                if (p.charAt(k) != '*') {
+                    isVisited[i][j] = -1;
+                    return false;
+                }
+            }
+            isVisited[i][j] = 1;
+            return true;
+        }
+
+        if (p.charAt(j) == s.charAt(i) || p.charAt(j) == '?') {
+            isVisited[i][j] = isMatch (s, p, i+1, j+1) == true ? 1:-1;
+            return (isVisited[i][j] == 1 ? true : false);
+        }
+        else if (p.charAt(j) == '*') {
+            for (int k=i; k<=s.length(); k++) { 
+                if (isMatch(s, p, k, j+1)) {
+                    isVisited[i][j] = 1;
+                    return true;
+                }
+            }
+            isVisited[i][j] = -1;
+            return false;
+        }
+        else {
+            isVisited[i][j] = -1;
+            return false;
+        }
+        
+    }
+}
